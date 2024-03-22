@@ -3,11 +3,12 @@ import 'package:ensemble/framework/error_handling.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:ensemble/framework/logging/log_provider.dart';
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/foundation.dart';
 
 class FirebaseAnalyticsProvider extends LogProvider {
-  late FirebaseOptions? firebaseOptions;
-  late FirebaseAnalytics _analytics;
+  FirebaseOptions? firebaseOptions;
+  FirebaseAnalytics? _analytics;
   void _init({Map? options, String? ensembleAppId, bool shouldAwait = false}) {
     this.options = options;
     this.ensembleAppId = ensembleAppId;
@@ -59,13 +60,14 @@ class FirebaseAnalyticsProvider extends LogProvider {
       }
     }
     _analytics = FirebaseAnalytics.instance;
+    FlutterError.onError = FirebaseCrashlytics.instance.recordFlutterFatalError;
   }
 
   @override
   Future<void> log(
       String event, Map<String, dynamic> parameters, LogLevel level) async {
     // Use _firebaseApp for logging...
-    _analytics.logEvent(name: event, parameters: parameters);
+    _analytics?.logEvent(name: event, parameters: parameters);
     print('Firebase: Logged event: $event with parameters: $parameters');
   }
 }
