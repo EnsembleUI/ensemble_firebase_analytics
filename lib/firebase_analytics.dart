@@ -14,7 +14,7 @@ class FirebaseAnalyticsProvider extends LogProvider {
     this.ensembleAppId = ensembleAppId;
     this.shouldAwait = shouldAwait;
     if (options != null) {
-      FirebaseConfig config = FirebaseConfig.fromYaml(options);
+      FirebaseConfig config = FirebaseConfig.fromMap(options);
       if (defaultTargetPlatform == TargetPlatform.iOS) {
         firebaseOptions = config.iOSConfig;
       } else if (defaultTargetPlatform == TargetPlatform.android) {
